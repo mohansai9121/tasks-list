@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
 
 app = Flask(__name__)
@@ -26,7 +27,7 @@ def index():
             db.session.commit()
             return redirect('/')
         except:
-            return "Theere was an error in adding your task"
+            return "There was an error in adding your task"
         
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
@@ -54,6 +55,8 @@ def update(id):
             return "There was a problem in updating the task"
     else:
         return render_template('update.html', task=task_to_update)
+
+migrate = Migrate(app, db)
 
 if __name__ == "__main__":
     with app.app_context():
